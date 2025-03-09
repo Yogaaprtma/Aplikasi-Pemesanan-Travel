@@ -1,0 +1,145 @@
+.invoice-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+.invoice-card {
+    border-radius: 10px;
+    overflow: hidden;
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+.invoice-header {
+    background: linear-gradient(135deg, #6e8efb, #4a6cf7);
+    padding: 1.5rem;
+    color: white;
+}
+.invoice-body {
+    padding: 1.5rem;
+}
+.invoice-info-row {
+    margin-bottom: 1.25rem;
+}
+.invoice-info-label {
+    font-weight: 600;
+    color: #495057;
+}
+.invoice-info-value {
+    color: #212529;
+}
+.invoice-divider {
+    height: 1px;
+    background-color: #e9ecef;
+    margin: 1.5rem 0;
+}
+.invoice-total {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-top: 1rem;
+}
+.invoice-footer {
+    margin-top: 2rem;
+    text-align: center;
+    padding-bottom: 1.5rem;
+}
+.btn-download {
+    padding: 0.625rem 1.25rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+    margin: 0.5rem;
+    width: auto;
+}
+.btn-download:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(74, 108, 247, 0.3);
+}
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    display: inline-block;
+}
+.custom-breadcrumb {
+    padding: 0.75rem 0;
+    margin-bottom: 1.5rem;
+    background-color: transparent;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;
+    width: 100%;
+}
+.custom-breadcrumb .breadcrumb {
+    flex-wrap: nowrap;
+}
+.custom-breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+    content: '\F285';
+    font-family: 'Bootstrap-icons';
+}
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 767px) {
+    .invoice-header {
+        padding: 1.25rem;
+        text-align: center;
+    }
+    .invoice-header .col-md-6:last-child {
+        margin-top: 1rem;
+        text-align: center;
+    }
+    .invoice-body {
+        padding: 1.25rem;
+    }
+    .table-responsive {
+        margin-bottom: 1rem;
+        border-radius: 8px;
+    }
+    .invoice-total {
+        padding: 1rem;
+    }
+    .invoice-total .col-md-6:last-child {
+        margin-top: 1rem;
+        text-align: center;
+    }
+    h5.fw-bold {
+        font-size: 1.1rem;
+    }
+    .btn-download {
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+}
+
+@media (max-width: 575px) {
+    .invoice-container {
+        padding: 0 10px;
+    }
+    .action-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    .action-buttons .btn {
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+    .invoice-total .row {
+        flex-direction: column;
+    }
+    .invoice-total .col-md-6:last-child {
+        text-align: left;
+    }
+    .table thead th {
+        font-size: 0.8rem;
+    }
+    .table tbody td {
+        font-size: 0.9rem;
+    }
+}

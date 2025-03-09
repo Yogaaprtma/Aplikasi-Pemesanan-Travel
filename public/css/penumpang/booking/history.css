@@ -1,0 +1,55 @@
+.booking-row {
+    transition: all 0.2s ease;
+}
+
+.booking-row:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+.badge {
+    padding: 0.5rem 0.75rem;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.payment-method-option input[type="radio"] {
+    display: none;
+}
+
+.payment-method-option input[type="radio"] + label {
+    cursor: pointer;
+}
+
+.payment-method-option input[type="radio"] + label div {
+    transition: all 0.2s ease;
+}
+
+.payment-method-option input[type="radio"]:checked + label div {
+    border-color: #0d6efd !important;
+    box-shadow: 0 0 0 1px #0d6efd;
+    background-color: rgba(13, 110, 253, 0.05) !important;
+}
+
+.booking-mobile-card {
+    transition: all 0.2s ease;
+}
+
+.booking-mobile-card:hover {
+    background-color: rgba(13, 110, 253, 0.03);
+}
+
+@media (max-width: 576px) {
+    .badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        width: 100%;
+    }
+
+    .badge.bg-warning, .badge.bg-success, .badge.bg-danger {
+        padding: 0.5rem 1rem;
+    }
+}
