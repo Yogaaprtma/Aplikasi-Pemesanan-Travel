@@ -87,7 +87,10 @@
                                 <div class="travel-card card h-100">
                                     <div class="card-header bg-transparent border-0 p-0">
                                         <div class="position-relative">
-                                            <img class="card-img-top lazy-load" data-src="{{ asset('/images/destinations/'.strtolower(str_replace(' ', '-', $schedule->destination)).'.jpg') }}" alt="{{ $schedule->destination }}" data-error-src="{{ asset('/images/default-destination.jpg') }}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 140' width='400' height='140'%3E%3Crect width='400' height='140' style='fill:%23eee;'/%3E%3C/svg%3E">
+                                            <div class="card-img-top d-flex align-items-center justify-content-center bg-light"
+                                                style="height: 240px;">
+                                                <i class="fas fa-bus fa-3x text-secondary"></i>
+                                            </div>
                                             <div class="destination-badge">
                                                 <i class="fas fa-map-marker-alt me-1"></i><span class="destination-text">{{ $schedule->destination }}</span>
                                             </div>
@@ -209,7 +212,10 @@
                                 <div class="travel-card card h-100">
                                     <div class="card-header bg-transparent border-0 p-0">
                                         <div class="position-relative">
-                                            <img class="card-img-top lazy-load" data-src="{{ asset('/images/destinations/'.strtolower(str_replace(' ', '-', $schedule->destination)).'.jpg') }}" alt="{{ $schedule->destination }}" data-error-src="{{ asset('/images/default-destination.jpg') }}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 140' width='400' height='140'%3E%3Crect width='400' height='140' style='fill:%23eee;'/%3E%3C/svg%3E">
+                                            <div class="card-img-top d-flex align-items-center justify-content-center bg-light"
+                                                style="height: 140px;">
+                                                <i class="fas fa-bus fa-3x text-secondary"></i>
+                                            </div>
                                             <div class="destination-badge">
                                                 <i class="fas fa-map-marker-alt me-1"></i><span class="destination-text">{{ $schedule->destination }}</span>
                                             </div>

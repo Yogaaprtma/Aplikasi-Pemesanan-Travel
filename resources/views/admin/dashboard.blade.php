@@ -185,7 +185,10 @@
                     <ul class="list-group list-group-flush">
                         @foreach($latestPassengers as $passenger)
                             <li class="list-group-item px-0 py-3 d-flex align-items-center">
-                                <img class="avatar me-3" src="{{ asset('images/avatar.jpg') }}" alt="User" onerror="this.src='https://via.placeholder.com/40'">
+                                <div class="avatar me-3 d-flex align-items-center justify-content-center bg-light rounded-circle" 
+                                    style="width: 40px; height: 40px;">
+                                    <i class="fas fa-user text-secondary"></i>
+                                </div>
                                 <div class="flex-grow-1">
                                     <p class="mb-0 fw-medium">{{ $passenger->user->nama ?? 'Guest' }}</p>
                                     <p class="mb-0 small text-muted">
