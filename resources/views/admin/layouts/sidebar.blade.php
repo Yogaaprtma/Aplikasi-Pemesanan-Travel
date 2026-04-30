@@ -9,19 +9,37 @@
             <div class="px-3">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a href="{{ route('home.admin') }}" class="nav-link {{ request()->routeIs('home.admin') ? 'active' : '' }}">
+                        <a href="/admin/dashboard" class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">
                             <i class="fas fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('jadwal.page') }}" class="nav-link {{ request()->routeIs('jadwal.page') ? 'active' : '' }}">
+                        <a href="/admin/jadwal-travel" class="nav-link {{ request()->is('admin/jadwal-travel*') ? 'active' : '' }}">
                             <i class="fas fa-calendar-alt"></i>
                             <span>Jadwal Travel</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.report') }}" class="nav-link {{ request()->routeIs('admin.report') ? 'active' : '' }}">
+                        <a href="/admin/payments" class="nav-link {{ request()->is('admin/payments*') ? 'active' : '' }}">
+                            <i class="fas fa-money-check-alt"></i>
+                            <span>Konfirmasi Bayar</span>
+                            @php
+                                $pendingCount = \App\Models\Payment::where('status', 'pending')->count();
+                            @endphp
+                            @if($pendingCount > 0)
+                                <span class="badge bg-danger rounded-pill ms-auto">{{ $pendingCount }}</span>
+                            @endif
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/users" class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}">
+                            <i class="fas fa-users"></i>
+                            <span>Penumpang</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/report" class="nav-link {{ request()->is('admin/report*') || request()->is('admin/reports*') ? 'active' : '' }}">
                             <i class="fas fa-chart-bar"></i>
                             <span>Laporan</span>
                         </a>
@@ -31,7 +49,7 @@
         </nav>
         
         <div class="p-3 border-top border-secondary mt-3">
-            <a href="{{ route('logout') }}" class="nav-link d-flex align-items-center">
+            <a href="/logout" class="nav-link d-flex align-items-center">
                 <i class="fas fa-sign-out-alt"></i>
                 <span class="ms-3">Logout</span>
             </a>
