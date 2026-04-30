@@ -6,7 +6,7 @@
     <div class="container-fluid py-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb bg-light p-3 rounded shadow-sm mb-4">
-                <li class="breadcrumb-item"><a href="{{ route('home.admin') }}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ '/admin/dashboard' }}">Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Laporan Travel</li>
             </ol>
         </nav>
@@ -54,19 +54,22 @@
                                         <div class="d-flex align-items-center">
                                             <div class="progress flex-grow-1 me-2" style="height: 8px;">
                                                 @php
-                                                    $capacity = 100;
-                                                    $percentage = min(($report->bookings_count / $capacity) * 100, 100);
-                                                    $colorClass = $percentage > 80 ? 'bg-success' : ($percentage > 50 ? 'bg-info' : 'bg-primary');
+                                                    $bookedSeats = $report->bookings->where('status', '!=', 'cancelled')->sum('seats');
+                                                    $totalCapacity = $report->quota + $bookedSeats;
+                                                    $percentage = $totalCapacity > 0 ? min(($bookedSeats / $totalCapacity) * 100, 100) : 0;
+                                                    $colorClass = $percentage > 80 ? 'bg-danger' : ($percentage > 50 ? 'bg-warning' : 'bg-primary');
                                                 @endphp
-                                                <div class="progress-bar {{ $colorClass }}" role="progressbar" style="width: {{ $percentage }}%" aria-valuenow="{{ $report->bookings_count }}" aria-valuemin="0" aria-valuemax="{{ $capacity }}">
-                                                    
+                                                <div class="progress-bar {{ $colorClass }}" role="progressbar" 
+                                                    style="width: {{ $percentage }}%" 
+                                                    aria-valuenow="{{ $bookedSeats }}" 
+                                                    aria-valuemin="0" aria-valuemax="{{ $totalCapacity }}">
                                                 </div>
                                             </div>
-                                            <span class="fw-bold">{{ $report->bookings_count }}</span>
+                                            <span class="fw-bold" data-bs-toggle="tooltip" title="{{ $bookedSeats }}/{{ $totalCapacity }} kursi">{{ $bookedSeats }}</span>
                                         </div>
                                     </td>
                                     <td class="text-center">
-                                        <a href="{{ route('admin.travel.report', $report->id) }}" class="btn btn-primary btn-sm rounded-pill">
+                                        <a href="{{ '/admin/reports/travel/' . $report->id }}" class="btn btn-primary btn-sm rounded-pill">
                                             <i class="fas fa-eye me-1"></i> Detail
                                         </a>
                                     </td>
