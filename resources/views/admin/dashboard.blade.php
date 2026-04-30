@@ -27,7 +27,7 @@
     </div>
 
     <div class="row">
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-2 col-md-4 mb-4">
             <div class="card stats-card h-100 animate__animated animate__fadeInUp">
                 <div class="card-body d-flex align-items-center">
                     <div class="icon-box bg-gradient-primary text-white">
@@ -41,7 +41,7 @@
             </div>
         </div>
         
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-2 col-md-4 mb-4">
             <div class="card stats-card h-100 animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
                 <div class="card-body d-flex align-items-center">
                     <div class="icon-box bg-gradient-success text-white">
@@ -49,13 +49,13 @@
                     </div>
                     <div>
                         <p class="text-muted mb-0">Total Penumpang</p>
-                        <h3 class="mb-0">{{ $totalPassengers }}</h3>
+                        <h3 class="mb-0">{{ $totalUsers }}</h3>
                     </div>
                 </div>
             </div>
         </div>
         
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-2 col-md-4 mb-4">
             <div class="card stats-card h-100 animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
                 <div class="card-body d-flex align-items-center">
                     <div class="icon-box bg-gradient-warning text-white">
@@ -69,7 +69,7 @@
             </div>
         </div>
         
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-xl-2 col-md-4 mb-4">
             <div class="card stats-card h-100 animate__animated animate__fadeInUp" style="animation-delay: 0.3s">
                 <div class="card-body d-flex align-items-center">
                     <div class="icon-box bg-gradient-danger text-white">
@@ -77,7 +77,35 @@
                     </div>
                     <div>
                         <p class="text-muted mb-0">Pendapatan</p>
-                        <h3 class="mb-0">Rp {{ number_format($totalRevenue, 2, ',', '.') }}</h3>
+                        <h3 class="mb-0">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 mb-4">
+            <div class="card stats-card h-100 animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
+                <div class="card-body d-flex align-items-center">
+                    <div class="icon-box bg-gradient-primary text-white">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <div>
+                        <p class="text-muted mb-0">Menunggu Bayar</p>
+                        <h3 class="mb-0">{{ $pendingPayments }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 mb-4">
+            <div class="card stats-card h-100 animate__animated animate__fadeInUp" style="animation-delay: 0.5s">
+                <div class="card-body d-flex align-items-center">
+                    <div class="icon-box bg-gradient-success text-white">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div>
+                        <p class="text-muted mb-0">Total Terdaftar</p>
+                        <h3 class="mb-0">{{ $totalPassengers }}</h3>
                     </div>
                 </div>
             </div>
@@ -87,7 +115,7 @@
     <div class="card mb-4" data-aos="fade-up">
         <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
             <h5 class="mb-0 fw-bold">Jadwal Travel Terbaru</h5>
-            <a href="{{ route('jadwal.create') }}" class="btn btn-primary btn-sm">
+            <a href="{{ '/admin/jadwal-travel/create' }}" class="btn btn-primary btn-sm">
                 <i class="fas fa-plus me-1"></i> Tambah Jadwal
             </a>
         </div>
@@ -139,10 +167,10 @@
                                 </span>
                             </td>                            
                             <td class="text-end pe-3">
-                                <a href="{{ route('jadwal.edit', $schedule->id) }}" class="btn btn-sm btn-primary">
+                                <a href="{{ '/admin/jadwal-travel/' . $schedule->id . '/edit' }}" class="btn btn-sm btn-primary">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('jadwal.destroy', $schedule->id) }}" method="POST" class="d-inline delete-form">
+                                <form action="{{ '/admin/jadwal-travel/' . $schedule->id }}" method="POST" class="d-inline delete-form">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Hapus Jadwal">
@@ -157,7 +185,7 @@
             </div>
         </div>
         <div class="card-footer bg-white text-center">
-            <a href="{{ route('jadwal.page') }}" class="text-decoration-none">View All Schedules <i class="fas fa-arrow-right ms-1"></i></a>
+            <a href="{{ '/admin/jadwal-travel' }}" class="text-decoration-none">View All Schedules <i class="fas fa-arrow-right ms-1"></i></a>
         </div>
     </div>
 
