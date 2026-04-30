@@ -68,7 +68,7 @@ class AdminController extends Controller
 
     public function report()
     {
-        $reports = TravelSchedule::withCount('bookings')->latest()->get();
+        $reports = TravelSchedule::with(['bookings'])->withCount('bookings')->latest()->get();
         return view('admin.report.report', compact('reports'));
     }
 
