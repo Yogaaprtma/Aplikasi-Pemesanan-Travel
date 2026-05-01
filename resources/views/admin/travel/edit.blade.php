@@ -11,8 +11,8 @@
             <div class="col-lg-8 col-xl-7 col-xxl-6">
                 <nav aria-label="breadcrumb" class="mb-4 slide-in-right">
                     <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="{{ route('home.admin') }}" class="text-decoration-none">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('jadwal.page') }}" class="text-decoration-none">Jadwal Travel</a></li>
+                        <li class="breadcrumb-item"><a href="/admin/dashboard" class="text-decoration-none">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="/admin/jadwal-travel" class="text-decoration-none">Jadwal Travel</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Edit Jadwal</li>
                     </ol>
                 </nav>
@@ -50,19 +50,22 @@
                         </div>
                         @endif
 
-                        <form action="{{ route('jadwal.update', $schedule->id) }}" method="POST" class="needs-validation" id="scheduleForm" novalidate>
+                        <form action="{{ '/admin/jadwal-travel/' . $schedule->id }}" method="POST" class="needs-validation" id="scheduleForm" novalidate>
                             @csrf
                             @method('PUT')
                             <div class="row g-4">
-                                <div class="col-md-12 fade-in" style="--delay: 0.1s">
+                                <div class="col-md-6 fade-in" style="--delay: 0.1s">
                                     <div class="form-floating form-group">
-                                        <input type="text" id="destination" name="destination" class="form-control form-control-lg @error('destination') is-invalid @enderror" value="{{ old('destination', $schedule->destination) }}" placeholder="Masukkan tujuan" required>
-                                        <label for="destination">
-                                            <i class="fas fa-map-marker-alt text-primary me-2"></i>Tujuan
-                                        </label>
-                                        <div class="invalid-feedback">
-                                            Tujuan tidak boleh kosong
-                                        </div>
+                                        <input type="text" id="origin" name="origin" class="form-control form-control-lg @error('origin') is-invalid @enderror" value="{{ old('origin', $schedule->origin) }}" placeholder="Kota Asal" required>
+                                        <label for="origin"><i class="fas fa-location-arrow text-primary me-2"></i>Kota Asal</label>
+                                        @error('origin')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6 fade-in" style="--delay: 0.15s">
+                                    <div class="form-floating form-group">
+                                        <input type="text" id="destination" name="destination" class="form-control form-control-lg @error('destination') is-invalid @enderror" value="{{ old('destination', $schedule->destination) }}" placeholder="Kota Tujuan" required>
+                                        <label for="destination"><i class="fas fa-map-marker-alt text-primary me-2"></i>Kota Tujuan</label>
+                                        @error('destination')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                     </div>
                                 </div>
 
@@ -125,9 +128,24 @@
                                     </div>
                                 </div>
 
+                                <div class="col-md-6 fade-in" style="--delay: 0.55s">
+                                    <label class="form-label mb-2"><i class="fas fa-bus text-primary me-2"></i>Jenis Kendaraan</label>
+                                    <select name="vehicle_type" class="form-select form-select-lg @error('vehicle_type') is-invalid @enderror" required>
+                                        <option value="bus" {{ old('vehicle_type', $schedule->vehicle_type) == 'bus' ? 'selected' : '' }}>🚌 Bus</option>
+                                        <option value="minivan" {{ old('vehicle_type', $schedule->vehicle_type) == 'minivan' ? 'selected' : '' }}>🚐 Minivan</option>
+                                        <option value="car" {{ old('vehicle_type', $schedule->vehicle_type) == 'car' ? 'selected' : '' }}>🚗 Mobil</option>
+                                    </select>
+                                    @error('vehicle_type')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                </div>
+
+                                <div class="col-12 fade-in" style="--delay: 0.6s">
+                                    <label class="form-label mb-2"><i class="fas fa-info-circle text-primary me-2"></i>Catatan (Opsional)</label>
+                                    <textarea name="description" class="form-control" rows="2" placeholder="Informasi tambahan...">{{ old('description', $schedule->description) }}</textarea>
+                                </div>
+
                                 <div class="col-12 mt-4 slide-in-bottom">
                                     <div class="d-flex flex-column flex-md-row gap-3 justify-content-md-end">
-                                        <a href="{{ route('jadwal.page') }}" class="btn btn-light btn-lg px-4 d-flex align-items-center justify-content-center shadow-sm">
+                                        <a href="/admin/jadwal-travel" class="btn btn-light btn-lg px-4 d-flex align-items-center justify-content-center shadow-sm">
                                             <i class="fas fa-arrow-left me-2"></i>
                                             <span>Kembali</span>
                                         </a>
