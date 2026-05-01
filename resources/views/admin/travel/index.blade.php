@@ -9,7 +9,7 @@
     <div class="container-fluid px-4 py-5 fade-in">
         <nav aria-label="breadcrumb" class="mb-4">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('home.admin') }}" class="text-decoration-none">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ '/admin/dashboard' }}" class="text-decoration-none">Dashboard</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Jadwal Travel</li>
             </ol>
         </nav>
@@ -29,7 +29,7 @@
                 <p class="text-muted">Kelola semua jadwal perjalanan dalam satu tampilan</p>
             </div>
             <div class="col-auto">
-                <a href="{{ route('jadwal.create') }}" class="btn btn-primary btn-lg rounded-pill shadow pulse-btn">
+                <a href="{{ '/admin/jadwal-travel/create' }}" class="btn btn-primary btn-lg rounded-pill shadow pulse-btn">
                     <i class="fas fa-plus me-2"></i>Tambah Jadwal
                 </a>
             </div>
@@ -93,10 +93,10 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="fw-bold mb-0">Rp {{ number_format($schedule->price, 0, ',', '.') }}</h5>
                         <div>
-                            <a href="{{ route('jadwal.edit', $schedule->id) }}" class="btn btn-warning btn-sm btn-floating me-1">
+                            <a href="{{ '/admin/jadwal-travel/' . $schedule->id . '/edit' }}" class="btn btn-warning btn-sm btn-floating me-1">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <form action="{{ route('jadwal.destroy', $schedule->id) }}" method="POST" class="d-inline delete-form">
+                            <form action="{{ '/admin/jadwal-travel/' . $schedule->id }}" method="POST" class="d-inline delete-form">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm btn-floating">
@@ -147,10 +147,10 @@
                                 </td>
                                 <td>
                                     <div class="d-flex justify-content-center gap-2">
-                                        <a href="{{ route('jadwal.edit', $schedule->id) }}" class="btn btn-outline-warning btn-sm btn-icon" data-bs-toggle="tooltip" title="Edit Jadwal">
+                                        <a href="{{ '/admin/jadwal-travel/' . $schedule->id . '/edit' }}" class="btn btn-outline-warning btn-sm btn-icon" data-bs-toggle="tooltip" title="Edit Jadwal">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('jadwal.destroy', $schedule->id) }}" method="POST" class="d-inline delete-form">
+                                        <form action="{{ '/admin/jadwal-travel/' . $schedule->id }}" method="POST" class="d-inline delete-form">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-outline-danger btn-sm btn-icon" data-bs-toggle="tooltip" title="Hapus Jadwal">
@@ -172,7 +172,7 @@
                 <i class="fas fa-calendar-times text-muted" style="font-size: 5rem;"></i>
                 <h4 class="mt-4">Tidak Ada Jadwal Ditemukan</h4>
                 <p class="text-muted mb-4">Coba ubah filter atau tambahkan jadwal baru</p>
-                <a href="{{ route('jadwal.create') }}" class="btn btn-primary rounded-pill px-4">
+                <a href="{{ '/admin/jadwal-travel/create' }}" class="btn btn-primary rounded-pill px-4">
                     <i class="fas fa-plus me-2"></i>Tambah Jadwal Baru
                 </a>
             </div>
