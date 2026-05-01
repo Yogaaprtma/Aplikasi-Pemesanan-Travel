@@ -6,8 +6,8 @@
     <div class="container-fluid py-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb bg-light p-3 rounded shadow-sm mb-4">
-                <li class="breadcrumb-item"><a href="{{ route('home.admin') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('admin.report') }}">Laporan Travel</a></li>
+                <li class="breadcrumb-item"><a href="{{ '/admin/dashboard' }}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ '/admin/report' }}">Laporan Travel</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Detail Laporan</li>
             </ol>
         </nav>
@@ -15,7 +15,7 @@
         <div class="card shadow-sm mb-4">
             <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
                 <h5 class="card-title mb-0 text-truncate">{{ $travel->destination }}</h5>
-                <a href="{{ route('admin.report') }}" class="btn btn-outline-secondary btn-sm">
+                <a href="{{ '/admin/report' }}" class="btn btn-outline-secondary btn-sm">
                     <i class="fas fa-arrow-left me-1"></i> <span class="d-none d-sm-inline">Kembali</span>
                 </a>
             </div>
@@ -73,14 +73,17 @@
                                     <div class="col-6">
                                         <div class="small text-muted">Kapasitas Terisi</div>
                                         <div class="fw-bold">
-                                            @php
-                                                $capacity = 100;
-                                                $totalPassengers = count($travel->bookings);
-                                                $percentage = round(($totalPassengers / $capacity) * 100);
+                                        @php
+                                                $totalSeatsBooked = $travel->bookings->where('status', '!=', 'cancelled')->sum('seats');
+                                                $capacity = $travel->quota + $totalSeatsBooked;
+                                                $percentage = $capacity > 0 ? round(($totalSeatsBooked / $capacity) * 100) : 0;
                                             @endphp
-                                            {{ $percentage }}%
+                                            {{ $percentage }}% ({{ $totalSeatsBooked }}/{{ $capacity }} kursi)
                                             <div class="progress mt-1" style="height: 6px;">
-                                                <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $percentage }}%;" aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="progress-bar {{ $percentage >= 80 ? 'bg-danger' : ($percentage >= 50 ? 'bg-warning' : 'bg-primary') }}"
+                                                    role="progressbar" style="width: {{ $percentage }}%;"
+                                                    aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="100">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
