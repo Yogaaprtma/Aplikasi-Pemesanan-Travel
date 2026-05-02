@@ -19,6 +19,8 @@ class Booking extends Model
         'passenger_phone',
         'status',
         'cancelled_at',
+        'rating',
+        'review',
     ];
 
     protected $casts = [
