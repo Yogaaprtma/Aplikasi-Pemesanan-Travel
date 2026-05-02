@@ -111,4 +111,34 @@ class BookingController extends Controller
 
         return redirect()->route('booking.history')->with('success', 'Booking berhasil dibatalkan. Kuota telah dikembalikan.');
     }
+
+    /**
+     * Submit Ulasan (Review) Perjalanan
+     */
+    public function submitReview(Request $request, $id)
+    {
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'review' => 'nullable|string|max:1000',
+        ]);
+
+        $booking = Booking::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        if ($booking->status !== 'confirmed') {
+            return redirect()->back()->with('error', 'Hanya tiket terkonfirmasi yang dapat diulas.');
+        }
+
+        if (!$booking->travelSchedule->departure_time->isPast()) {
+            return redirect()->back()->with('error', 'Anda baru bisa memberikan ulasan setelah perjalanan selesai.');
+        }
+
+        $booking->update([
+            'rating' => $request->rating,
+            'review' => $request->review,
+        ]);
+
+        return redirect()->back()->with('success', 'Terima kasih atas ulasan Anda!');
+    }
 }
