@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\TravelSchedule;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminController extends Controller
 {
@@ -76,5 +77,15 @@ class AdminController extends Controller
     {
         $travel = TravelSchedule::with(['bookings.user', 'bookings.payment'])->findOrFail($id);
         return view('admin.report.travel_report', compact('travel'));
+    }
+
+    public function exportPdf()
+    {
+        $reports = TravelSchedule::with(['bookings'])->withCount('bookings')->latest()->get();
+        
+        $pdf = Pdf::loadView('admin.report.pdf', compact('reports'));
+        $pdf->setPaper('A4', 'landscape');
+        
+        return $pdf->download('Laporan_Travel_'.now()->format('Ymd_His').'.pdf');
     }
 }
