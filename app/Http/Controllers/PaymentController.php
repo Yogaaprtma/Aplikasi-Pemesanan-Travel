@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class PaymentController extends Controller
 {
@@ -82,5 +84,36 @@ class PaymentController extends Controller
         }
 
         return view('penumpang.payment.invoice', compact('payment'));
+    }
+
+    /**
+     * Download E-Ticket PDF
+     */
+    public function downloadTicket($id)
+    {
+        $payment = Payment::where('id', $id)
+                        ->with(['booking.user', 'booking.travelSchedule'])
+                        ->firstOrFail();
+
+        // Hanya pemilik booking yang bisa lihat tiket
+        if ($payment->booking->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses ke tiket ini.');
+        }
+
+        // Tiket hanya bisa diunduh jika status sudah paid (dikonfirmasi)
+        if ($payment->status !== 'paid') {
+            abort(403, 'Tiket belum tersedia karena pembayaran belum dikonfirmasi oleh admin.');
+        }
+
+        // Generate QR Code base64 untuk disisipkan ke dalam PDF
+        // Kita menggunakan format SVG dan meng-encode-nya ke base64
+        $qrCode = base64_encode(QrCode::format('svg')->size(120)->generate($payment->booking->booking_code));
+
+        $pdf = Pdf::loadView('penumpang.payment.ticket_pdf', compact('payment', 'qrCode'));
+        
+        // Atur ukuran kertas
+        $pdf->setPaper('A4', 'portrait');
+
+        return $pdf->stream('E-Ticket_' . $payment->booking->booking_code . '.pdf');
     }
 }
