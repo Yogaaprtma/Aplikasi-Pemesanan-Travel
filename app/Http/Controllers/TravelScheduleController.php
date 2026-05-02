@@ -48,7 +48,7 @@ class TravelScheduleController extends Controller
             'description'    => $request->description,
         ]);
 
-        return redirect()->route('jadwal.page')->with('success', 'Jadwal berhasil ditambahkan.');
+        return redirect()->route('admin.jadwal.page')->with('success', 'Jadwal berhasil ditambahkan.');
     }
 
     public function editJadwal($id)
@@ -86,7 +86,7 @@ class TravelScheduleController extends Controller
             'description'    => $request->description,
         ]);
 
-        return redirect()->route('jadwal.page')->with('success', 'Jadwal berhasil diperbarui.');
+        return redirect()->route('admin.jadwal.page')->with('success', 'Jadwal berhasil diperbarui.');
     }
 
     public function destroyJadwal($id)
@@ -96,12 +96,12 @@ class TravelScheduleController extends Controller
         // Cek apakah ada booking yang masih aktif
         $activeBookings = $schedule->bookings()->whereIn('status', ['pending', 'confirmed'])->count();
         if ($activeBookings > 0) {
-            return redirect()->route('jadwal.page')
+            return redirect()->route('admin.jadwal.page')
                 ->with('error', 'Jadwal tidak bisa dihapus karena masih ada ' . $activeBookings . ' booking aktif.');
         }
 
         $schedule->delete();
 
-        return redirect()->route('jadwal.page')->with('success', 'Jadwal berhasil dihapus.');
+        return redirect()->route('admin.jadwal.page')->with('success', 'Jadwal berhasil dihapus.');
     }
 }
