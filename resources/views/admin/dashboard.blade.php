@@ -190,22 +190,40 @@
     </div>
 
     <div class="row">
+        <!-- Grafik Pendapatan -->
         <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
-            <div class="card h-100">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0 fw-bold">Laporan Penumpang</h5>
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-header bg-white border-0 pt-4 pb-0">
+                    <h5 class="mb-0 fw-bold">Grafik Pendapatan Bulanan</h5>
                 </div>
                 <div class="card-body">
-                    <div class="chart-container">
+                    <div class="chart-container" style="position: relative; height:300px;">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Laporan Penumpang -->
+        <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="150">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-header bg-white border-0 pt-4 pb-0">
+                    <h5 class="mb-0 fw-bold">Statistik Tujuan Favorit</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="position: relative; height:300px;">
                         <canvas id="passengerChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    
+    <div class="row">
         
-        <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="200">
-            <div class="card h-100">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <div class="col-lg-12 mb-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center pt-4 pb-3 border-0">
                     <h5 class="mb-0 fw-bold">Penumpang Terbaru</h5>
                     <a href="#" class="text-primary small">Lihat Semua</a>
                 </div>
@@ -243,7 +261,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const passengerData = @json($passengerReport);
+            const revenueData = @json($revenueMonthly);
     
+            // Render Passenger Chart (Bar Chart)
             const passengerLabels = passengerData.map(data => data.destination);
             const passengerCounts = passengerData.map(data => data.total_passengers);
     
@@ -279,6 +299,50 @@
                             grid: {
                                 display: false
                             }
+                        }
+                    }
+                }
+            });
+
+            // Render Revenue Chart (Line Chart)
+            const revenueLabels = revenueData.map(data => data.month);
+            const revenueTotals = revenueData.map(data => data.total);
+
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            const revenueChart = new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: revenueLabels,
+                    datasets: [{
+                        label: 'Pendapatan (Rp)',
+                        data: revenueTotals,
+                        backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                        borderColor: 'rgb(40, 167, 69)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { drawBorder: false },
+                            ticks: {
+                                callback: function(value) {
+                                    if(value >= 1000000) return 'Rp ' + (value/1000000) + ' Jt';
+                                    if(value >= 1000) return 'Rp ' + (value/1000) + ' Rb';
+                                    return 'Rp ' + value;
+                                }
+                            }
+                        },
+                        x: {
+                            grid: { display: false }
                         }
                     }
                 }
