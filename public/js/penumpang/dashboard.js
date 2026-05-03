@@ -178,26 +178,42 @@ document.addEventListener('DOMContentLoaded', function() {
     searchInput.addEventListener('input', performSearch);
     clearSearchBtn.addEventListener('click', clearSearch);
     
+    const originFilter = document.getElementById('filterOrigin');
     const destinationFilter = document.getElementById('destination');
     const departureDateFilter = document.getElementById('departure_date');
+    const minPriceFilter = document.getElementById('min_price');
+    const maxPriceFilter = document.getElementById('max_price');
     const applyFilterBtn = document.getElementById('applyFilter');
     const resetFilterBtn = document.getElementById('resetFilter');
     
     applyFilterBtn.addEventListener('click', function() {
+        const selectedOrigin = originFilter.value.toLowerCase();
         const selectedDestination = destinationFilter.value.toLowerCase();
         const selectedDate = departureDateFilter.value;
+        const minPrice = minPriceFilter.value ? parseInt(minPriceFilter.value) : 0;
+        const maxPrice = maxPriceFilter.value ? parseInt(maxPriceFilter.value) : Infinity;
         
         allCards.forEach(card => {
+            const cardOrigin = card.getAttribute('data-origin').toLowerCase();
             const cardDestination = card.getAttribute('data-destination').toLowerCase();
             const cardDeparture = card.getAttribute('data-departure');
+            const cardPrice = parseInt(card.getAttribute('data-price'));
             
             let showCard = true;
+            
+            if (selectedOrigin && cardOrigin !== selectedOrigin) {
+                showCard = false;
+            }
             
             if (selectedDestination && cardDestination !== selectedDestination) {
                 showCard = false;
             }
             
             if (selectedDate && cardDeparture !== selectedDate) {
+                showCard = false;
+            }
+
+            if (cardPrice < minPrice || cardPrice > maxPrice) {
                 showCard = false;
             }
             
@@ -224,8 +240,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     resetFilterBtn.addEventListener('click', function() {
+        originFilter.value = '';
         destinationFilter.value = '';
         departureDateFilter.value = '';
+        minPriceFilter.value = '';
+        maxPriceFilter.value = '';
         
         allCards.forEach(card => {
             card.style.display = 'block';
