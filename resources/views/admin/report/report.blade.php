@@ -14,6 +14,9 @@
         <div class="card shadow-sm">
             <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
                 <h5 class="card-title mb-0">Laporan Jumlah Penumpang Per Travel</h5>
+                <a href="{{ route('report.export.pdf') }}" class="btn btn-danger btn-sm rounded-pill shadow-sm">
+                    <i class="fas fa-file-pdf me-1"></i> Export PDF
+                </a>
             </div>
             
             <div class="card-body">
