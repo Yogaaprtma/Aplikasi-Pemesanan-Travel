@@ -67,11 +67,11 @@
                                 <h4 class="text-muted">Belum Ada Pemesanan</h4>
                                 <p class="text-muted">Anda belum memiliki riwayat pemesanan tiket</p>
                                 <div class="d-flex justify-content-center gap-2">
-                                    <a href="{{ route('penumpang.home') }}" class="btn btn-outline-secondary mt-2">
+                                    <a href="{{ route('home.penumpang') }}" class="btn btn-outline-secondary mt-2">
                                         <i class="bi bi-house-fill me-1"></i>Kembali ke Home
                                     </a>
-                                    <a href="{{ route('booking.page') }}" class="btn btn-primary mt-2">
-                                        <i class="bi bi-plus-circle me-2"></i>Pesan Tiket Sekarang
+                                    <a href="{{ route('home.penumpang') }}" class="btn btn-primary mt-2">
+                                        <i class="bi bi-search me-1"></i>Cari Jadwal Perjalanan
                                     </a>
                                 </div>
                             </div>
@@ -131,17 +131,37 @@
                                                 <td class="px-4 py-3">
                                                     @if($booking->status == 'pending')
                                                         <div class="d-flex gap-2">
-                                                            <a href="{{ route('booking.page', $booking->id) }}" 
-                                                            class="btn btn-success btn-sm rounded-3" target="_blank">
+                                                            <a href="{{ route('booking.page') }}" 
+                                                            class="btn btn-success btn-sm rounded-3">
                                                                 <i class="bi bi-credit-card me-1"></i>Bayar
                                                             </a>
+                                                            <form action="{{ route('booking.cancel', $booking->id) }}" method="POST" class="cancel-form">
+                                                                @csrf @method('DELETE')
+                                                                <button type="submit" class="btn btn-outline-danger btn-sm rounded-3">
+                                                                    <i class="bi bi-x-circle me-1"></i>Batal
+                                                                </button>
+                                                            </form>
                                                         </div>
                                                     @elseif($booking->status == 'confirmed')
-                                                        <div class="d-flex gap-2">
+                                                        <div class="d-flex flex-wrap gap-2">
                                                             <a href="{{ route('invoice.generate', $booking->payment->id) }}" 
                                                             class="btn btn-success btn-sm rounded-3" target="_blank">
                                                                 <i class="bi bi-file-earmark-text me-1"></i>Invoice
                                                             </a>
+                                                            <a href="{{ route('ticket.download', $booking->payment->id) }}" 
+                                                            class="btn btn-primary btn-sm rounded-3" target="_blank">
+                                                                <i class="bi bi-ticket-detailed me-1"></i>E-Ticket
+                                                            </a>
+                                                            @if(\Carbon\Carbon::parse($booking->travelSchedule->departure_time)->isPast() && !$booking->rating)
+                                                                <button type="button" class="btn btn-warning btn-sm rounded-3" 
+                                                                    data-bs-toggle="modal" data-bs-target="#reviewModal{{ $booking->id }}">
+                                                                    <i class="bi bi-star me-1"></i>Beri Ulasan
+                                                                </button>
+                                                            @elseif($booking->rating)
+                                                                <span class="badge bg-warning text-dark d-flex align-items-center">
+                                                                    <i class="bi bi-star-fill me-1"></i> {{ $booking->rating }}/5
+                                                                </span>
+                                                            @endif
                                                         </div>
                                                     @else
                                                         <button type="button" class="btn btn-outline-secondary btn-sm rounded-3" disabled>
@@ -203,17 +223,39 @@
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="d-grid">
+                                                <div class="d-grid gap-2">
                                                     @if($booking->status == 'pending')
-                                                        <a href="{{ route('booking.page', $booking->id) }}" 
-                                                            class="btn btn-success rounded-3" target="_blank">
+                                                        <a href="{{ route('booking.page') }}" 
+                                                            class="btn btn-success rounded-3">
                                                             <i class="bi bi-credit-card me-1"></i>Bayar
                                                         </a>
+                                                        <form action="{{ route('booking.cancel', $booking->id) }}" method="POST" class="cancel-form">
+                                                            @csrf @method('DELETE')
+                                                            <button type="submit" class="btn btn-outline-danger rounded-3 w-100">
+                                                                <i class="bi bi-x-circle me-1"></i>Batalkan Booking
+                                                            </button>
+                                                        </form>
                                                     @elseif($booking->status == 'confirmed')
-                                                        <a href="{{ route('invoice.generate', $booking->payment->id) }}" 
-                                                        class="btn btn-success rounded-3" target="_blank">
-                                                            <i class="bi bi-file-earmark-text me-1"></i>Lihat Invoice
-                                                        </a>
+                                                        <div class="d-grid gap-2">
+                                                            <a href="{{ route('invoice.generate', $booking->payment->id) }}" 
+                                                            class="btn btn-success rounded-3" target="_blank">
+                                                                <i class="bi bi-file-earmark-text me-1"></i>Lihat Invoice
+                                                            </a>
+                                                            <a href="{{ route('ticket.download', $booking->payment->id) }}" 
+                                                            class="btn btn-primary rounded-3" target="_blank">
+                                                                <i class="bi bi-ticket-detailed me-1"></i>Download E-Ticket
+                                                            </a>
+                                                            @if(\Carbon\Carbon::parse($booking->travelSchedule->departure_time)->isPast() && !$booking->rating)
+                                                                <button type="button" class="btn btn-warning rounded-3" 
+                                                                    data-bs-toggle="modal" data-bs-target="#reviewModal{{ $booking->id }}">
+                                                                    <i class="bi bi-star me-1"></i>Beri Ulasan
+                                                                </button>
+                                                            @elseif($booking->rating)
+                                                                <div class="alert alert-warning py-2 mb-0 text-center">
+                                                                    <i class="bi bi-star-fill me-1"></i> Ulasan Anda: {{ $booking->rating }}/5
+                                                                </div>
+                                                            @endif
+                                                        </div>
                                                     @else
                                                         <button type="button" class="btn btn-outline-secondary rounded-3" disabled>
                                                             <i class="bi bi-x-circle me-1"></i>Dibatalkan
@@ -231,6 +273,47 @@
             </div>
         </div>
     </div>
+
+    {{-- Review Modals --}}
+    @foreach($bookings as $booking)
+        @if($booking->status == 'confirmed' && \Carbon\Carbon::parse($booking->travelSchedule->departure_time)->isPast() && !$booking->rating)
+            <div class="modal fade" id="reviewModal{{ $booking->id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content border-0 shadow">
+                        <div class="modal-header bg-warning text-dark border-0">
+                            <h5 class="modal-title fw-bold"><i class="bi bi-star-fill me-2"></i>Beri Ulasan Perjalanan</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="{{ route('booking.review', $booking->id) }}" method="POST">
+                            @csrf
+                            <div class="modal-body p-4">
+                                <p class="text-muted mb-4">Bagaimana pengalaman perjalanan Anda dengan rute <strong>{{ $booking->travelSchedule->origin }} &rarr; {{ $booking->travelSchedule->destination }}</strong>?</p>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label fw-medium">Rating (1-5)</label>
+                                    <select name="rating" class="form-select" required>
+                                        <option value="5">5 - Sangat Baik</option>
+                                        <option value="4">4 - Baik</option>
+                                        <option value="3">3 - Cukup</option>
+                                        <option value="2">2 - Kurang</option>
+                                        <option value="1">1 - Sangat Kurang</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-medium">Ulasan Anda (Opsional)</label>
+                                    <textarea name="review" class="form-control" rows="3" placeholder="Ceritakan pengalaman Anda..."></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer border-0">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-warning px-4">Kirim Ulasan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @endif
+    @endforeach
 @endsection
 
 @section('styles')
@@ -239,4 +322,22 @@
 
 @section('scripts')
     <script src="{{ asset('js/penumpang/booking/history.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.querySelectorAll('.cancel-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Batalkan Booking?',
+                    text: 'Quota kursi akan dikembalikan. Tindakan ini tidak bisa dibatalkan.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, Batalkan!',
+                    cancelButtonText: 'Tidak',
+                }).then(result => { if (result.isConfirmed) form.submit(); });
+            });
+        });
+    </script>
 @endsection
