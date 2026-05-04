@@ -110,6 +110,9 @@
                     <button id="downloadPdf" class="btn btn-primary btn-download">
                         <i class="bi bi-file-earmark-pdf me-2"></i> Download Invoice
                     </button>
+                    <a href="{{ route('ticket.download', $payment->id) }}" class="btn btn-success btn-download" target="_blank">
+                        <i class="bi bi-ticket-detailed me-2"></i> Download E-Ticket
+                    </a>
                 </div>
             </div>
         </div>
