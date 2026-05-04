@@ -15,29 +15,41 @@
                         </a>
                     </li>
 
-                    @php
-                        $hasSchedules = \App\Models\TravelSchedule::exists();
-                        $hasBookings = \App\Models\Booking::where('user_id', Auth::id())->exists();
-                    @endphp
+                    <li class="nav-item">
+                        <a href="{{ route('booking.page') }}" class="nav-link d-flex align-items-center text-white {{ request()->routeIs('booking.page') ? 'active' : '' }}">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span>Booking Saya</span>
+                        </a>
+                    </li>
 
                     <li class="nav-item">
-                        @if($hasSchedules && $hasBookings)
-                            <a href="{{ route('booking.history') }}" class="nav-link d-flex align-items-center text-white {{ request()->routeIs('booking.history') ? 'active' : '' }}">
-                                <i class="fas fa-history"></i>
-                                <span>History</span>
-                            </a>
-                        @else
-                            <a href="javascript:void(0);" class="nav-link d-flex align-items-center text-white" onclick="showNoHistoryAlert()">
-                                <i class="fas fa-history"></i>
-                                <span>History</span>
-                            </a>
-                        @endif
+                        <a href="{{ route('booking.history') }}" class="nav-link d-flex align-items-center text-white {{ request()->routeIs('booking.history') ? 'active' : '' }}">
+                            <i class="fas fa-history"></i>
+                            <span>Riwayat</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('profile.index') }}" class="nav-link d-flex align-items-center text-white {{ request()->routeIs('profile.*') ? 'active' : '' }}">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Profil Saya</span>
+                        </a>
                     </li>
                 </ul>
             </div>
         </nav>
 
         <div class="p-3 border-top border-light mt-3">
+            <div class="d-flex align-items-center mb-3">
+                <div class="avatar-circle bg-white text-primary d-flex align-items-center justify-content-center rounded-circle fw-bold me-2"
+                    style="width:36px;height:36px;font-size:14px;flex-shrink:0;">
+                    {{ strtoupper(substr(Auth::user()->nama, 0, 1)) }}
+                </div>
+                <div class="overflow-hidden">
+                    <p class="mb-0 fw-medium text-white text-truncate" style="font-size:13px;">{{ Auth::user()->nama }}</p>
+                    <small class="text-white-50 text-truncate d-block" style="font-size:11px;">{{ Auth::user()->email }}</small>
+                </div>
+            </div>
             <a href="{{ route('logout') }}" class="nav-link text-white d-flex align-items-center">
                 <i class="fas fa-sign-out-alt"></i>
                 <span class="ms-3">Logout</span>
